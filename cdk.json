@@ -9,6 +9,8 @@
       "cdk*.json",
       "**/*.d.ts",
       "**/*.js",
+      "lambda/*.ts",
+      "lambda/*.d.ts",
       "tsconfig.json",
       "package*.json",
       "yarn.lock",
