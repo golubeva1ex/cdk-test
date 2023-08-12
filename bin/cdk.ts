@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
-import {CdkStack} from '../lib/cdk-stack';
-// import {RdsPostgresAndElasticsearchStack} from '../lib/cdk-stack-db';
+import {CdkStackLambdas} from '../lib/cdk-stack-lambdas';
+import {RdsPostgresStack} from '../lib/cdk-stack-postgres';
+import {ElastiCacheRedisStack} from "../lib/cdk-stack-redis";
 
 const app = new cdk.App();
-new CdkStack(app, 'CdkStack');
-// new RdsPostgresAndElasticsearchStack(app, 'RdsPostgresAndElasticsearchStack');
+new CdkStackLambdas(app, 'CdkStack');
+new RdsPostgresStack(app, 'RdsPostgresStack');
+new ElastiCacheRedisStack(app, 'ElastiCacheRedisStack');
