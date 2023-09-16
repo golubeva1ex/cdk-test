@@ -34,7 +34,7 @@ export class RdsPostgresStack extends Stack {
         const dbName = "ecom-postgres";
 
 
-        const secret = Secret.fromSecretNameV2(this, 'EcomPostgresCreds', 'MyPostgresSecret');
+        const secret = Secret.fromSecretNameV2(this, 'EcomPostgresCreds', 'EcomPostgresCreds');
 
         const rdsInstance = new DatabaseInstance(this, "ECOM-POSTGRES-1", {
             vpcSubnets: { subnetType: SubnetType.PRIVATE_ISOLATED },

@@ -25,46 +25,46 @@ export class CdkStackHello extends NestedStack {
 
         items.addMethod('GET')
         items.addMethod('POST')
-
-        // Grant Lambda permissions to access RDS
-        lambdaFn.addToRolePolicy(new iam.PolicyStatement({
-            actions: ['rds:Connect'],
-            resources: ['*']
-        }));
-
-        // Grant Lambda permissions to access ElastiCache (Redis)
-        lambdaFn.addToRolePolicy(new iam.PolicyStatement({
-            actions: ['elasticache:DescribeCacheClusters'],
-            resources: ['*']
-        }));
-        lambdaFn.addToRolePolicy(new iam.PolicyStatement({
-            actions: ['elasticache:DescribeCacheNodes'],
-            resources: ['*']
-        }));
-        lambdaFn.addToRolePolicy(new iam.PolicyStatement({
-            actions: ['elasticache:ListTagsForResource'],
-            resources: ['*']
-        }));
-        lambdaFn.addToRolePolicy(new iam.PolicyStatement({
-            actions: ['elasticache:DescribeCacheParameterGroups'],
-            resources: ['*']
-        }));
-        lambdaFn.addToRolePolicy(new iam.PolicyStatement({
-            actions: ['elasticache:DescribeCacheParameters'],
-            resources: ['*']
-        }));
-
-
-        // Grant Lambda permissions to access RDS (read/write)
-        lambdaFn.addToRolePolicy(new iam.PolicyStatement({
-            actions: ['rds-data:ExecuteSql'],
-            resources: ['arn:aws:rds-db:*:*:dbuser:db-name/db-user'] // Replace with proper ARN
-        }));
-
-        // Grant Lambda permissions to access ElastiCache (read/write)
-        lambdaFn.addToRolePolicy(new iam.PolicyStatement({
-            actions: ['elasticache:DescribeCacheClusters', 'elasticache:DescribeCacheNodes'],
-            resources: ['arn:aws:elasticache:region:account-id:cluster:cluster-name'] // Replace with proper ARN
-        }));
+        //
+        // // Grant Lambda permissions to access RDS
+        // lambdaFn.addToRolePolicy(new iam.PolicyStatement({
+        //     actions: ['rds:Connect'],
+        //     resources: ['*']
+        // }));
+        //
+        // // Grant Lambda permissions to access ElastiCache (Redis)
+        // lambdaFn.addToRolePolicy(new iam.PolicyStatement({
+        //     actions: ['elasticache:DescribeCacheClusters'],
+        //     resources: ['*']
+        // }));
+        // lambdaFn.addToRolePolicy(new iam.PolicyStatement({
+        //     actions: ['elasticache:DescribeCacheNodes'],
+        //     resources: ['*']
+        // }));
+        // lambdaFn.addToRolePolicy(new iam.PolicyStatement({
+        //     actions: ['elasticache:ListTagsForResource'],
+        //     resources: ['*']
+        // }));
+        // lambdaFn.addToRolePolicy(new iam.PolicyStatement({
+        //     actions: ['elasticache:DescribeCacheParameterGroups'],
+        //     resources: ['*']
+        // }));
+        // lambdaFn.addToRolePolicy(new iam.PolicyStatement({
+        //     actions: ['elasticache:DescribeCacheParameters'],
+        //     resources: ['*']
+        // }));
+        //
+        //
+        // // Grant Lambda permissions to access RDS (read/write)
+        // lambdaFn.addToRolePolicy(new iam.PolicyStatement({
+        //     actions: ['rds-data:ExecuteSql'],
+        //     resources: ['arn:aws:rds-db:*:*:dbuser:db-name/db-user'] // Replace with proper ARN
+        // }));
+        //
+        // // Grant Lambda permissions to access ElastiCache (read/write)
+        // lambdaFn.addToRolePolicy(new iam.PolicyStatement({
+        //     actions: ['elasticache:DescribeCacheClusters', 'elasticache:DescribeCacheNodes'],
+        //     resources: ['arn:aws:elasticache:region:account-id:cluster:cluster-name'] // Replace with proper ARN
+        // }));
     }
 }

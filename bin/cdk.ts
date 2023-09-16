@@ -32,7 +32,3 @@ const lambdaStack = new CdkStackLambdas(app, 'LambdaStack', {
     databaseEndpoint: rdsPostgresStack.databaseEndpoint,
     cacheClusterEndpoint: redisElastiCacheStack.cacheClusterEndpoint,
 });
-
-new cdk.CfnOutput(app, 'InfraStackVpcId', {value: infraStack.vpc.vpcId});
-new cdk.CfnOutput(app, 'RDSPostgresEndpoint', {value: rdsPostgresStack.databaseEndpoint});
-new cdk.CfnOutput(app, 'RedisElastiCacheEndpoint', {value: redisElastiCacheStack.cacheClusterEndpoint});
