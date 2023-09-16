@@ -1,7 +1,7 @@
 import {CfnOutput, Stack, StackProps,} from 'aws-cdk-lib';
-import {CfnCacheCluster} from 'aws-cdk-lib/aws-elasticache';
 import {Construct} from "constructs";
 import {ISubnet, SecurityGroup, Vpc} from "aws-cdk-lib/aws-ec2";
+import {CfnSubnetGroup, CfnCacheCluster} from "aws-cdk-lib/aws-elasticache";
 
 interface ElastiCacheRedisStackProps extends StackProps {
     vpc: Vpc
@@ -14,12 +14,24 @@ export class ElastiCacheRedisStack extends Stack {
 
     constructor(scope: Construct, id: string, props: ElastiCacheRedisStackProps) {
         super(scope, id, props);
+        const privateSubnetsIds = props.vpc.isolatedSubnets.map(subnet => subnet.subnetId);
+        const redis_subnet_group = new CfnSubnetGroup(this, 'redis_subnet_group', {
+            cacheSubnetGroupName: 'ecom-redis-cache-subnet-group',
+            subnetIds: privateSubnetsIds,
+            description: 'subnet group for redis'
+        });
+        console.log('>>>',privateSubnetsIds)
 
         const cacheCluster = new CfnCacheCluster(this, 'MyCacheCluster', {
             engine: 'redis',
             cacheNodeType: 'cache.t2.micro',
             numCacheNodes: 1,
-            vpcSecurityGroupIds: [props.vpc.vpcDefaultSecurityGroup],
+            vpcSecurityGroupIds: [props.securityGroup.securityGroupId],
+            port: 6379,
+            autoMinorVersionUpgrade: true,
+            // preferredAvailabilityZone: props.vpc.publicSubnets[0].availabilityZone,
+            cacheSubnetGroupName: redis_subnet_group.ref,
+
         });
         this.cacheClusterEndpoint = cacheCluster.attrRedisEndpointAddress
 

@@ -31,7 +31,7 @@ export class RdsPostgresStack extends Stack {
         const engine = DatabaseInstanceEngine.postgres({version: PostgresEngineVersion.VER_15_3});
         const instanceType = InstanceType.of(InstanceClass.T3, InstanceSize.MICRO);
         const port = 5432;
-        const dbName = "ecom-postgres";
+        const dbName = "ecompostgres";
 
 
         const secret = Secret.fromSecretNameV2(this, 'EcomPostgresCreds', 'EcomPostgresCreds');
