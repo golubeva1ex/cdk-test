@@ -1,34 +1,28 @@
-import {
-    Stack,
-    StackProps,
-} from 'aws-cdk-lib';
-import {
-    Vpc,
-} from "aws-cdk-lib/aws-ec2";
-import {CfnOutput} from 'aws-cdk-lib';
+import {CfnOutput, Stack, StackProps,} from 'aws-cdk-lib';
 import {CfnCacheCluster} from 'aws-cdk-lib/aws-elasticache';
 import {Construct} from "constructs";
+import {ISubnet, SecurityGroup, Vpc} from "aws-cdk-lib/aws-ec2";
 
+interface ElastiCacheRedisStackProps extends StackProps {
+    vpc: Vpc
+    publicSubnet: ISubnet
+    privateSubnet: ISubnet
+    securityGroup: SecurityGroup
+}
 export class ElastiCacheRedisStack extends Stack {
-    constructor(scope: Construct, id: string, props?: StackProps) {
+    public readonly cacheClusterEndpoint: string;
+
+    constructor(scope: Construct, id: string, props: ElastiCacheRedisStackProps) {
         super(scope, id, props);
 
-
-        // Create a VPC for the RDS and ElastiCache resources
-        const vpc = new Vpc(this, 'RdsElastiCacheVpc', {
-            maxAzs: 2,
-            natGateways: 1,
-        });
-
-        // Create ElastiCache cluster
         const cacheCluster = new CfnCacheCluster(this, 'MyCacheCluster', {
             engine: 'redis',
             cacheNodeType: 'cache.t2.micro',
             numCacheNodes: 1,
-            vpcSecurityGroupIds: [vpc.vpcDefaultSecurityGroup],
+            vpcSecurityGroupIds: [props.vpc.vpcDefaultSecurityGroup],
         });
+        this.cacheClusterEndpoint = cacheCluster.attrRedisEndpointAddress
 
-        // Export the ElastiCache cluster properties for other stacks to use
         new CfnOutput(this, 'CacheClusterEndpoint', {
             value: cacheCluster.attrRedisEndpointAddress
         });

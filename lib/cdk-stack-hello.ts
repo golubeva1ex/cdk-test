@@ -13,6 +13,7 @@ export class CdkStackHello extends NestedStack {
             code: Code.fromAsset('lambda'),
             handler: 'hello.handler',
             memorySize: 128,
+            //vpc:
         });
 
         const api = new LambdaRestApi(this, 'HelloEndpoint', {
@@ -28,7 +29,7 @@ export class CdkStackHello extends NestedStack {
         // Grant Lambda permissions to access RDS
         lambdaFn.addToRolePolicy(new iam.PolicyStatement({
             actions: ['rds:Connect'],
-            // resources: [rdsEndpoint] // TODO ?????
+            resources: ['*']
         }));
 
         // Grant Lambda permissions to access ElastiCache (Redis)
