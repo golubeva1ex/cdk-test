@@ -1,12 +1,16 @@
-import {APIGatewayEvent, APIGatewayProxyResult} from "aws-lambda";
 import {Client} from "pg";
+import {SecretsManager} from "aws-sdk";
+import {APIGatewayEvent, APIGatewayProxyResult} from "aws-lambda";
 
 export const handler = async function(event: APIGatewayEvent): Promise<APIGatewayProxyResult> {
+    const secretsManagerClient = new SecretsManager();
+    const secretData = await secretsManagerClient.getSecretValue({SecretId: 'EcomPostgresCreds'}).promise();
+    const secretString = secretData.SecretString && JSON.parse(secretData.SecretString)
     const client = new Client({
-        user: process.env.DB_USER,
+        user: secretString?.username,
         host: process.env.DB_HOST,
         database: process.env.DB_NAME,
-        password: process.env.DB_PASSWORD,
+        password: secretString?.password,
         port: parseInt(process.env.DB_PORT || '5432', 10)
     });
 

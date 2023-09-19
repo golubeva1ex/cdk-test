@@ -26,8 +26,7 @@ export class RdsPostgresStack extends Stack {
         const dbName = "ecom_postgres_auth";
 
         const secret = Secret.fromSecretNameV2(this, 'EcomPostgresCreds', 'EcomPostgresCreds');
-        const dbUsername = secret.secretValueFromJson('username').toString();
-        const dbPassword = secret.secretValueFromJson('password').toString();
+
         const rdsInstance = new DatabaseInstance(this, "ECOM-POSTGRES-1", {
             vpcSubnets: { subnetType: SubnetType.PRIVATE_ISOLATED },
             instanceType,
@@ -44,12 +43,6 @@ export class RdsPostgresStack extends Stack {
             removalPolicy: RemovalPolicy.DESTROY,
         });
 
-        const dbpass = rdsInstance.secret!.secretValue.toString()
-
-        console.log('RDSPostgresStackProps dbpass', dbpass);
-        console.log('username', dbUsername);
-        console.log('password', dbPassword);
-
         this.databaseEndpoint = rdsInstance.dbInstanceEndpointAddress
         const lambdaFn = new Function(this, 'RDSTableCreator', {
             runtime: Runtime.NODEJS_14_X,
@@ -59,8 +52,6 @@ export class RdsPostgresStack extends Stack {
                 DB_HOST: rdsInstance.dbInstanceEndpointAddress,
                 DB_PORT: port.toString(),
                 DB_NAME: dbName,
-                DB_USER: dbUsername,
-                DB_PASSWORD: dbpass,
             },
         });
         const rule = new Rule(this, 'InvokeLambdaRule', {
@@ -84,8 +75,6 @@ export class RdsPostgresStack extends Stack {
         // Attach a managed policy to Lambda, so it can log to CloudWatch
         lambdaFn.role!.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'));
 
-        new CfnOutput(this, 'RDSUsername', {value: dbUsername});
-        new CfnOutput(this, 'RDSPassword', {value: dbpass});
         new CfnOutput(this, 'RDSInstanceEndpoint', {
             value: rdsInstance.dbInstanceEndpointAddress
         });

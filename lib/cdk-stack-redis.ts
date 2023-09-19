@@ -20,7 +20,6 @@ export class ElastiCacheRedisStack extends Stack {
             subnetIds: privateSubnetsIds,
             description: 'subnet group for redis'
         });
-        console.log('>>>',privateSubnetsIds)
 
         const cacheCluster = new CfnCacheCluster(this, 'MyCacheCluster', {
             engine: 'redis',
