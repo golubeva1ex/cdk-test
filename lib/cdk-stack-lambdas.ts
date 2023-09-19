@@ -12,11 +12,11 @@ interface CdkStackLambdasProps extends StackProps {
 export class CdkStackLambdas extends Stack {
     constructor(scope: App, id: string, props?: CdkStackLambdasProps) {
         super(scope, id, props);
-        const secret = Secret.fromSecretNameV2(this, 'EcomPostgresCreds', 'MyPostgresSecret');
+        const secret = Secret.fromSecretNameV2(this, 'EcomPostgresCreds', 'EcomPostgresCreds');
 
-        const username = secret.secretValueFromJson('username').toString();
-        const password = secret.secretValueFromJson('password').toString();
-
+        const dbUsername = secret.secretValueFromJson('username').toString();
+        const dbPassword = secret.secretValueFromJson('password').toString();
+        // console.log('CdkStackLambdas');
         new CdkStackHello(this, 'CdkStackHello')
         new CdkStackBonjour(this, 'CdkStackBonjour')
     }
